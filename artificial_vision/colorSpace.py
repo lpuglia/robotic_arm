@@ -1,3 +1,8 @@
+
+# Riconoscimento dell'oggetto verde e giallo più grande
+# Tracciamento bounding box con relativo centro
+# Tracciamento segmento tra i 2 centri
+
 import cv2
 import numpy as np
 
