@@ -1,7 +1,6 @@
 import cv2
 import numpy as np
 
-# TEST COLORE - BGR -> HSV
 cap = cv2.VideoCapture(0)
 
 #START
@@ -37,7 +36,7 @@ while(1):
     lower_yellow = np.array([25,100,100], dtype=np.uint8)
     upper_yellow = np.array([40,255,255], dtype=np.uint8)
     
-    # Threshold the HSV image to get only blue colors
+    # Threshold the HSV image to get only my colors
     #mask = cv2.inRange(hsv, lower_blue, upper_blue)
     greenMask = cv2.inRange(hsv, lower_green, upper_green)
     yellowMask = cv2.inRange(hsv, lower_yellow, upper_yellow)
@@ -52,7 +51,7 @@ while(1):
     greenMask = cv2.dilate(greenMask,element,iterations=2) # ex:2
     greenMask = cv2.erode(greenMask,element)
     
-    #idem per Giallo
+    #...idem per yellow
     yellowMask = cv2.erode(yellowMask,element, iterations=2) # ex:2
     yellowMask = cv2.dilate(yellowMask,element,iterations=2) # ex:2
     yellowMask = cv2.erode(yellowMask,element)
@@ -62,7 +61,7 @@ while(1):
     #cv2.imshow('res',res+res2)    
     #cv2.imshow('res',res)
     
-    #Create Contours for all blue objects
+    #Create Contours for all green objects
     _, contours, hierarchy = cv2.findContours(greenMask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
     maximumArea = 0
     bestContour = None
@@ -71,7 +70,7 @@ while(1):
         if currentArea > maximumArea:
             bestContour = contour
             maximumArea = currentArea
-    #Create a bounding box around the biggest blue object
+    #Create a bounding box around the biggest green object
     if bestContour is not None:
         x,y,w,h = cv2.boundingRect(bestContour)
         cv2.rectangle(frame, (x,y),(x+w,y+h), (0,0,255), 3)
@@ -85,7 +84,7 @@ while(1):
     ###########
     ###########
     
-    #Create Contours for all blue objects
+    #Create Contours for all yellow objects
     _, contours, hierarchy = cv2.findContours(yellowMask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
     maximumArea = 0
     bestContour = None
@@ -94,17 +93,18 @@ while(1):
         if currentArea > maximumArea:
             bestContour = contour
             maximumArea = currentArea
-    #Create a bounding box around the biggest blue object
+    #Create a bounding box around the biggest yellow object
     if bestContour is not None:
         x,y,w,h = cv2.boundingRect(bestContour)
         cv2.rectangle(frame, (x,y),(x+w,y+h), (255,0,255), 3)
         centerYellow = np.array([int(x+w/2),int(y+h/2)]);
         cv2.circle(frame,(int(centerYellow[0]),int(centerYellow[1])), 5, (255,0,0), -1)
-        print(centerGreen[:])
+        #print(centerGreen[:])
+        #Segmento tra i 2 centri
         if centerGreen[0] > 0 and centerYellow[1] > 0:
             cv2.line(frame,(centerGreen[0],centerGreen[1]),(centerYellow[0],centerYellow[1]),(255,0,0),2)
 
-    #Segmento tra i 2 centri
+    
 
 
     #Show the original camera feed with a bounding box overlayed 
