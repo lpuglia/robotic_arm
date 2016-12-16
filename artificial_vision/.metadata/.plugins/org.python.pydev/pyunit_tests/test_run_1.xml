@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<?pydev-testrun version="1.0"?><pydev-testsuite>
+<summary errors="1" failures="0" finished="true" name="Test Run: 1" tests="0" total_time="Finished in: 0.00 secs."/>
+<test location="/Users/federicocozza/Desktop/Federico Cozza/Università/Materiale didattico/Robotica/Progetto/robotic_arm/artificial_vision/RoboticArm/roboticarm/artificialvision/Main.py" status="error" test="Main" time="0">
+<stdout/>
+<stderr><![CDATA[Traceback (most recent call last):
+  File "/Users/federicocozza/.p2/pool/plugins/org.python.pydev_5.3.1.201610311318/pysrc/_pydev_runfiles/pydev_runfiles.py", line 468, in __get_module_from_str
+    mod = __import__(modname)
+  File "/Users/federicocozza/Desktop/Federico Cozza/Università/Materiale didattico/Robotica/Progetto/robotic_arm/artificial_vision/RoboticArm/roboticarm/artificialvision/Main.py", line 22, in <module>
+    hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
+cv2.error: /Users/jenkins/miniconda/1/x64/conda-bld/work/opencv-3.1.0/modules/imgproc/src/color.cpp:7646: error: (-215) (scn == 3 || scn == 4) && (depth == CV_8U || depth == CV_32F) in function ipp_cvtColor
+
+ERROR: Module: Main could not be imported (file: /Users/federicocozza/Desktop/Federico Cozza/Università/Materiale didattico/Robotica/Progetto/robotic_arm/artificial_vision/RoboticArm/roboticarm/artificialvision/Main.py).
+]]></stderr>
+</test>
+<launch mode="run">
+<launch_memento><![CDATA[<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<launchConfiguration local="true" path="RoboticArm artificialvision"/>
+]]></launch_memento>
+</launch>
+</pydev-testsuite>
