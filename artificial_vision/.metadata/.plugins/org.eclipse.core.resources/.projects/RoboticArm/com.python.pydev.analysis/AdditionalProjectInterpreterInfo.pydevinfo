@@ -1,26 +1,32 @@
 -- VERSION_4
 -- START DISKCACHE_2
-/Users/federicocozza/Desktop/Federico Cozza/Università/Materiale didattico/Robotica/Progetto/robotic_arm/artificial_vision/.metadata/.plugins/org.eclipse.core.resources/.projects/RoboticArm/com.python.pydev.analysis/v2_indexcache
-roboticarm.artificialvision.__init__|1481896515000000000|/Users/federicocozza/Desktop/Federico Cozza/Università/Materiale didattico/Robotica/Progetto/robotic_arm/artificial_vision/RoboticArm/roboticarm/artificialvision/__init__.py
-roboticarm.artificialvision.Main|1481896544000000000|/Users/federicocozza/Desktop/Federico Cozza/Università/Materiale didattico/Robotica/Progetto/robotic_arm/artificial_vision/RoboticArm/roboticarm/artificialvision/Main.py
-roboticarm.__init__|1481896515000000000|/Users/federicocozza/Desktop/Federico Cozza/Università/Materiale didattico/Robotica/Progetto/robotic_arm/artificial_vision/RoboticArm/roboticarm/__init__.py
+/Users/luca/Desktop/robotica/robotic_arm/artificial_vision/.metadata/.plugins/org.eclipse.core.resources/.projects/RoboticArm/com.python.pydev.analysis/v2_indexcache
+roboticarm.artificialvision.__init__|1486378110000000000|/Users/luca/Desktop/robotica/robotic_arm/artificial_vision/RoboticArm/roboticarm/artificialvision/__init__.py
+roboticarm.artificialvision.calibrazione|1486386676000000000|/Users/luca/Desktop/robotica/robotic_arm/artificial_vision/RoboticArm/roboticarm/artificialvision/calibrazione.py
+roboticarm.artificialvision.Main|1486378110000000000|/Users/luca/Desktop/robotica/robotic_arm/artificial_vision/RoboticArm/roboticarm/artificialvision/Main.py
+roboticarm.__init__|1486378110000000000|/Users/luca/Desktop/robotica/robotic_arm/artificial_vision/RoboticArm/roboticarm/__init__.py
 -- END DISKCACHE
 -- START DICTIONARY
-1
+2
+2=roboticarm.artificialvision.calibrazione
 1=roboticarm.artificialvision.Main
 -- END DICTIONARY
 -- START TREE 1
-13
+17
 bes|1|bestContour!11@
-cap|1|cap!11@
+cap|2|cap!11@cap!19@
 cen|2|centerGreen!11@centerYellow!11@
+cri|1|criteria!19@
 cur|1|currentArea!11@
 ele|1|element!11@
+gra|1|gray!19@
 gre|1|greenMask!11@
 hsv|1|hsv!11@
-k|1|k!11@
+img|1|imgpoints!19@
+k|2|k!11@k!19@
 low|2|lower_green!11@lower_yellow!11@
 max|1|maximumArea!11@
+obj|2|objpoints!19@objp!19@
 res|2|res!11@res2!11@
 upp|2|upper_yellow!11@upper_green!11@
 yel|1|yellowMask!11@

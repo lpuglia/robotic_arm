@@ -1,4 +1,5 @@
 MODULES_MANAGER_V2
-roboticarm.__init__|/Users/federicocozza/Desktop/Federico Cozza/Università/Materiale didattico/Robotica/Progetto/robotic_arm/artificial_vision/RoboticArm/roboticarm/__init__.py
-roboticarm.artificialvision.Main|/Users/federicocozza/Desktop/Federico Cozza/Università/Materiale didattico/Robotica/Progetto/robotic_arm/artificial_vision/RoboticArm/roboticarm/artificialvision/Main.py
-roboticarm.artificialvision.__init__|/Users/federicocozza/Desktop/Federico Cozza/Università/Materiale didattico/Robotica/Progetto/robotic_arm/artificial_vision/RoboticArm/roboticarm/artificialvision/__init__.py
+roboticarm.__init__|/Users/luca/Desktop/robotica/robotic_arm/artificial_vision/RoboticArm/roboticarm/__init__.py
+roboticarm.artificialvision.Main|/Users/luca/Desktop/robotica/robotic_arm/artificial_vision/RoboticArm/roboticarm/artificialvision/Main.py
+roboticarm.artificialvision.__init__|/Users/luca/Desktop/robotica/robotic_arm/artificial_vision/RoboticArm/roboticarm/artificialvision/__init__.py
+roboticarm.artificialvision.calibrazione|/Users/luca/Desktop/robotica/robotic_arm/artificial_vision/RoboticArm/roboticarm/artificialvision/calibrazione.py
