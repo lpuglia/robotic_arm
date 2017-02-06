@@ -1,2 +1,10 @@
 /.DS_Store
 artificial_vision/.metadata/*
+
+artificial_vision/.metadata/.log
+
+artificial_vision/.metadata/.log
+
+*.resources
+
+*.xmi
