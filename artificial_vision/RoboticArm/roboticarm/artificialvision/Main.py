@@ -1,8 +1,6 @@
 import cv2
 import numpy as np
-import math
 import pickle
-from time import sleep
 
 def save_obj (obj, name):
     with open(name + '.pkl', 'wb') as f:
@@ -12,14 +10,13 @@ def load_obj (name):
     with open(name + '.pkl', 'rb') as f:
         return pickle.load(f)
 
-pi = 3.14159255359
 numPickle = 50
 
-# TEST COLORE - BGR -> HSV
-cap = cv2.VideoCapture(0)
 numberOfSamples = numPickle
 counter = 1
 
+############################ CAMERA CALIBRATION - PARAMETERS
+'''
 # prepare object points, like (0,0,0), (1,0,0), (2,0,0) ....,(6,5,0)
 objp = np.zeros((4*5,3), np.float32)
 objp[:,:2] = np.mgrid[0:5,0:4].T.reshape(-1,2)
@@ -29,13 +26,10 @@ objpoints = [] # 3d point in real world space
 imgpoints = [] # 2d points in image plane.
 
 while(1):
-    sleep(0.2)
     centerGreen = np.array([-1,-1]);
     centerYellow = np.array([-1,-1]);
     # Take each frame
     _, frame = cap.read()
-    
-    ################# CAMERA CALIBRATION
     
     gray = cv2.cvtColor(frame,cv2.COLOR_BGR2GRAY)
  
@@ -51,9 +45,18 @@ while(1):
             break
         counter = counter + 1
         print(counter)
-        
+        cv2.imwrite("image_" + str(counter) + ".png", gray)
     cv2.imshow('grid', frame)
     cv2.waitKey(1)
 cv2.destroyAllWindows()
 save_obj(objpoints, "objpoints"+str(numPickle))
 save_obj(imgpoints, "imgpoints"+str(numPickle))
+'''
+############################ CAMERA CALIBRATION - MATRIX CALCULATION
+
+objpoints = load_obj("objpoints"+str(numPickle))
+imgpoints = load_obj("imgpoints"+str(numPickle))
+gray = cv2.imread("image_1.png")
+ret, mtx, dist, rvecs, tvecs = cv2.calibrateCamera(objpoints, imgpoints, gray.shape[::-1],None,None)
+
+#cap = cv2.VideoCapture(0)
