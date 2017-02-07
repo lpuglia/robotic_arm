@@ -8,3 +8,11 @@ artificial_vision/.metadata/.log
 *.resources
 
 *.xmi
+
+artificial_vision/.metadata/version.ini
+
+artificial_vision/.metadata/.plugins/org.eclipse.core.resources/.projects/RoboticArm/com.python.pydev.analysis/AdditionalProjectInterpreterInfo.pydevinfo
+
+artificial_vision/.metadata/.plugins/org.eclipse.core.resources/.projects/RoboticArm/com.python.pydev.analysis/AdditionalProjectInterpreterInfo.pydevinfo
+
+*.index

@@ -3,3 +3,4 @@ roboticarm.__init__|/Users/luca/Desktop/robotica/robotic_arm/artificial_vision/R
 roboticarm.artificialvision.Main|/Users/luca/Desktop/robotica/robotic_arm/artificial_vision/RoboticArm/roboticarm/artificialvision/Main.py
 roboticarm.artificialvision.__init__|/Users/luca/Desktop/robotica/robotic_arm/artificial_vision/RoboticArm/roboticarm/artificialvision/__init__.py
 roboticarm.artificialvision.calibrazione|/Users/luca/Desktop/robotica/robotic_arm/artificial_vision/RoboticArm/roboticarm/artificialvision/calibrazione.py
+roboticarm.artificialvision.temp|/Users/luca/Desktop/robotica/robotic_arm/artificial_vision/RoboticArm/roboticarm/artificialvision/temp.py
