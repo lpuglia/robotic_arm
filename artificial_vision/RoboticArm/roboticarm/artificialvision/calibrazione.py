@@ -34,6 +34,10 @@ while(1):
     gray = cv2.threshold(gray, thresh, 255, cv2.THRESH_BINARY)[1]
     '''
     cv2.imshow('pok',gray)
+    k = cv2.waitKey(5) & 0xFF
+    #If escape is pressed close all windows
+    if k == 27:
+        break
     # Find the chess board corners
     ret, corners = cv2.findChessboardCorners(gray, (5,5),None)
     print(ret)
@@ -49,7 +53,6 @@ while(1):
         #cv2.imshow('img',img)
         cv2.drawChessboardCorners(images, (5,5), corners,ret) # EX: corners2
         cv2.imshow('img',images)
-        cv2.waitKey(500)
 
     sleep(0.2)
     k = cv2.waitKey(5) & 0xFF
