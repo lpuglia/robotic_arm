@@ -16,3 +16,5 @@ artificial_vision/.metadata/.plugins/org.eclipse.core.resources/.projects/Roboti
 artificial_vision/.metadata/.plugins/org.eclipse.core.resources/.projects/RoboticArm/com.python.pydev.analysis/AdditionalProjectInterpreterInfo.pydevinfo
 
 *.index
+
+artificial_vision/.metadata/.plugins/org.eclipse.e4.workbench/workbench.xmi
