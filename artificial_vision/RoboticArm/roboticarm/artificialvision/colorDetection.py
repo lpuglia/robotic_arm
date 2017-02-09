@@ -1,16 +1,66 @@
+##################################################################################
+##################################################################################
+##### E' necessario effettuare prima la calibrazione con lo script "colorDetection"
+##################################################################################
+##################################################################################
+
 import cv2
 import numpy as np
 import math
+import pickle
+
+def save_obj (obj, name):
+    with open(name + '.pkl', 'wb') as f:
+        pickle.dump(obj, f, pickle.HIGHEST_PROTOCOL)
+
+def load_obj (name):
+    with open(name + '.pkl', 'rb') as f:
+        return pickle.load(f)
+
 pi = np.pi
+
 # TEST COLORE - BGR -> HSV
-cap = cv2.VideoCapture(1)
+cap = cv2.VideoCapture(0)
+
+mtx = load_obj("mtx")
+dist = load_obj("dist")
+newcameramtx = load_obj("newcameramtx")
+roi = load_obj("roi")
+
+# VERDE [cartoncino]
+
+lower_green = np.array([30,128,0], dtype=np.uint8)
+upper_green = np.array([90,255,255], dtype=np.uint8)
+    
+# ARANCIONE [cartoncino]
+    
+lower_yellow = np.array([5,192,0], dtype=np.uint8)
+upper_yellow = np.array([30,255,255], dtype=np.uint8)
 
 while(1):
     centerGreen = np.array([-1,-1]);
     centerYellow = np.array([-1,-1]);
     # Take each frame
     _, frame = cap.read()
+    
+    ##### Calibrazione
+    h,  w = frame.shape[:2]
+    
+    cv2.imshow('Pre-calib',frame)
+    cv2.waitKey(1)
 
+    ##### Method 2: Remapping
+    # undistort
+    mapx,mapy = cv2.initUndistortRectifyMap(mtx,dist,None,newcameramtx,(w,h),5)
+    dst = cv2.remap(frame,mapx,mapy,cv2.INTER_LINEAR)
+    
+    # crop the image
+    x,y,w,h = roi
+    dst = dst[y:y+h, x:x+w]
+
+    frame = dst
+    ##### FINE CALIBRAZIONE
+    
     # Convert BGR to HSV
     hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
 
@@ -22,16 +72,6 @@ while(1):
         y = 100
         z = 255
     """
-    
-    # VERDE [cartoncino]
-
-    lower_green = np.array([30,128,0], dtype=np.uint8)
-    upper_green = np.array([90,255,255], dtype=np.uint8)
-    
-    # ARANCIONE [cartoncino]
-    
-    lower_yellow = np.array([5,192,0], dtype=np.uint8)
-    upper_yellow = np.array([30,255,255], dtype=np.uint8)
 
     # Threshold the HSV image to get only green and yellow colors
     greenMask = cv2.inRange(hsv, lower_green, upper_green)
@@ -100,7 +140,7 @@ while(1):
         cv2.rectangle(frame, (x,y),(x+w,y+h), (0,100,255), 1)
         centerYellow = np.array([int(x+w/2),int(y+h/2)]);
         cv2.circle(frame,(int(centerYellow[0]),int(centerYellow[1])), 5, (255,0,0), -1)
-        print(centerGreen[:])
+        print(centerYellow[:])
         if centerGreen[0] > 0 and centerYellow[1] > 0:
             cv2.line(frame,(centerGreen[0],centerGreen[1]),(centerYellow[0],centerYellow[1]),(255,0,0),2)
 
@@ -112,7 +152,7 @@ while(1):
 
     #Show the original camera feed with a bounding box overlayed 
     cv2.imshow('frame',frame)
-    
+
     #Show the contours in a seperate window
     #cv2.imshow('mask',greenMask)
     #cv2.imshow('mask',yellowMask)
