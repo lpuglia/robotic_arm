@@ -1,8 +1,2 @@
 MODULES_MANAGER_V2
-roboticarm.__init__|/Users/luca/Desktop/robotica/robotic_arm/artificial_vision/RoboticArm/roboticarm/__init__.py
-roboticarm.artificialvision.Main|/Users/luca/Desktop/robotica/robotic_arm/artificial_vision/RoboticArm/roboticarm/artificialvision/Main.py
-roboticarm.artificialvision.NewCalibration|/Users/luca/Desktop/robotica/robotic_arm/artificial_vision/RoboticArm/roboticarm/artificialvision/NewCalibration.py
-roboticarm.artificialvision.__init__|/Users/luca/Desktop/robotica/robotic_arm/artificial_vision/RoboticArm/roboticarm/artificialvision/__init__.py
 roboticarm.artificialvision.calibrazione|/Users/luca/Desktop/robotica/robotic_arm/artificial_vision/RoboticArm/roboticarm/artificialvision/calibrazione.py
-roboticarm.artificialvision.calibrazione_2|/Users/luca/Desktop/robotica/robotic_arm/artificial_vision/RoboticArm/roboticarm/artificialvision/calibrazione_2.py
-roboticarm.artificialvision.temp|/Users/luca/Desktop/robotica/robotic_arm/artificial_vision/RoboticArm/roboticarm/artificialvision/temp.py
