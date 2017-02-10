@@ -142,13 +142,13 @@ uint32_t  getPWM(PCA9685 *pca9685,uint8_t channel) {
 int  trasformToPWM(int grado) {
    if(grado==-1)
      return grado;
-   if(grado==0)
-     return 150;
-   if(grado==180)
-     return 750;
    if(grado==-2)
-        return 0;
+     return 0;
+   if(grado<0)
+     grado=0;
+   if(grado>160)
+     grado=160;
 
-   return (900*grado)/180;
+   return 150+(280*grado)/90;
 }
 #endif /* OS_RT_INCLUDE_PCA9685_H_ */

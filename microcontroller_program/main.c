@@ -28,6 +28,7 @@ msg_t thReader(PCA9685 *arg) {
     int pos = 0;
     int count_ch=0;
     int ch0,ch1,ch2,ch3,ch4,ch5;
+    int d0,d1,d2,d3,d4,d5;
     uint32_t g= 0;
     uint8_t c;
   while(true){
@@ -40,44 +41,60 @@ msg_t thReader(PCA9685 *arg) {
       if((char)c==','){
         received[pos] = '\0';
         if(count_ch==0)
-                  ch0=trasformToPWM(atoi(received));
+          d0=atoi(received);
         if(count_ch==1)
-                  ch1=trasformToPWM(atoi(received));
+          d1=atoi(received);
         if(count_ch==2)
-                  ch2=trasformToPWM(atoi(received));
-        if(count_ch)
-                  ch3=trasformToPWM(atoi(received));
+          d2=atoi(received);
+        if(count_ch==3)
+          d3=atoi(received);
         if(count_ch==4)
-                  ch4=trasformToPWM(atoi(received));
+          d4=atoi(received);
         pos=0;
         count_ch++;
       }
     }
     received[pos] ='\0';
-    ch5=trasformToPWM(atoi(received));
+    d5=atoi(received);
+    ch0=trasformToPWM(d0);
+    ch1=trasformToPWM(d1);
+    ch2=trasformToPWM(d2);
+    ch3=trasformToPWM(d3);
+    ch4=trasformToPWM(d4);
+    ch5=trasformToPWM(d5);
+
     chThdSleepMilliseconds(100);
+    if(d0<-2 || d0>160 ||
+        d1<-2 || d1>160 ||
+        d2<-2 || d2>160 ||
+        d3<-2 || d3>160 ||
+        d4<-2 || d4>160 ||
+        d5<-2 || d5>160)
+    chprintf((BaseSequentialStream *)&SD2,"%d,%d,%d,%d,%d,%d (WARNING: degrees out of bounds)\n",ch0,ch1,ch2,ch3,ch4,ch5);
+    else
     chprintf((BaseSequentialStream *)&SD2,"%d,%d,%d,%d,%d,%d\n",ch0,ch1,ch2,ch3,ch4,ch5);
+
     if(ch0!=-1){
       setPWM(arg, 0, 0, ch0);
       //chThdSleepMilliseconds(100);
     }
-    if(ch0!=-1){
+    if(ch1!=-1){
       setPWM(arg, 1, 0, ch1);
       //chThdSleepMilliseconds(100);
     }
-    if(ch0!=-1){
+    if(ch2!=-1){
       setPWM(arg, 2, 0, ch2);
       //chThdSleepMilliseconds(100);
     }
-    if(ch0!=-1){
+    if(ch3!=-1){
       setPWM(arg, 3, 0, ch3);
      // chThdSleepMilliseconds(100);
     }
-    if(ch0!=-1){
+    if(ch4!=-1){
       setPWM(arg, 4, 0, ch4);
     //  chThdSleepMilliseconds(100);
     }
-    if(ch0!=-1){
+    if(ch5!=-1){
       setPWM(arg, 5, 0, ch5);
     //  chThdSleepMilliseconds(100);
     }
