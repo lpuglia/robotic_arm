@@ -1,4 +1,4 @@
-function [freq] = moveRobot(degrees, port)
+function [freq, robotErr] = moveRobot(degrees, port)
     if nargin < 2
         port = 'COM6';
     end
@@ -9,9 +9,13 @@ function [freq] = moveRobot(degrees, port)
         %ser.BytesAvailable
         fprintf(ser, '%d,%d,%d,%d,%d,%d&', degrees);
         s = fgetl(ser);
-        freq = cell2mat(textscan(s, '%d,%d,%d,%d,%d,%d'));
-    catch
+        res = textscan(s, '%d,%d,%d,%d,%d,%d (%[^\n)])');
+        freq = [res{1:6}];
+        robotErr = res{7};
+    catch exc
         freq = -1;
+        robotErr = cell(0,1);
+        getReport(exc)
     end
     fclose(ser);
 end
