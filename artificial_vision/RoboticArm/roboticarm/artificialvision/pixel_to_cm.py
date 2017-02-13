@@ -16,7 +16,7 @@ def load_obj (name):
 
 
 def pxTOcm (toConv, ratioIndex):
-    return (1/ratioIndex)*toConv
+    return toConv/ratioIndex
 
 pi = np.pi
 
