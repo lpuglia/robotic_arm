@@ -131,7 +131,6 @@ while(1):
     if k == 27:
         break
     '''
-    from time import sleep
     sleep(0.2) # Time in seconds
     
     if(abs(convIndex1 - convIndex2) < 0.2):
