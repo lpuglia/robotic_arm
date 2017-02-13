@@ -31,8 +31,7 @@ dist = load_obj("dist")
 newcameramtx = load_obj("newcameramtx")
 roi = load_obj("roi")
 
-print("Posiziona il robot sopra al puntino rosso")
-stringa = ""
+print("Posiziona la base del robot sopra al puntino rosso")
 
 ## Ciclo per posizionare il robot sempre nella stessa posizione
 ## Sistemare la base del robot del punto dell'origine del robot
