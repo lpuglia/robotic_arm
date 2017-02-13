@@ -8,6 +8,7 @@ import cv2
 import numpy as np
 import math
 import pickle
+from cv2 import waitKey
 
 def save_obj (obj, name):
     with open(name + '.pkl', 'wb') as f:
@@ -22,10 +23,31 @@ pi = np.pi
 # TEST COLORE - BGR -> HSV
 cap = cv2.VideoCapture(0)
 
+
+
+
 mtx = load_obj("mtx")
 dist = load_obj("dist")
 newcameramtx = load_obj("newcameramtx")
 roi = load_obj("roi")
+
+print("Posiziona la base del robot sopra al puntino rosso")
+
+## Ciclo per posizionare il robot sempre nella stessa posizione
+## Sistemare la base del robot del punto dell'origine del robot
+while(1):
+    _, frame = cap.read()
+
+    h,w = frame.shape[:2]
+    cv2.circle(frame,(int(w/2),int(h*5/6)),5,(0,0,255),-1)
+    
+    cv2.imshow('Posizionamento robot',frame)
+    cv2.waitKey(2)
+    
+    k = cv2.waitKey(5) & 0xFF
+    #If escape is pressed close all windows
+    if k == 27:
+        break
 
 # VERDE [cartoncino]
 
@@ -134,7 +156,7 @@ while(1):
         if currentArea > maximumArea:
             bestContour = contour
             maximumArea = currentArea
-    #Create a bounding box around the biggest blue object
+    #Create a bounding box around the biggest yellow object
     if bestContour is not None:
         x,y,w,h = cv2.boundingRect(bestContour)
         cv2.rectangle(frame, (x,y),(x+w,y+h), (0,100,255), 1)
