@@ -8,6 +8,7 @@ import cv2
 import numpy as np
 import math
 import pickle
+from cv2 import waitKey
 
 def save_obj (obj, name):
     with open(name + '.pkl', 'wb') as f:
@@ -16,6 +17,9 @@ def save_obj (obj, name):
 def load_obj (name):
     with open(name + '.pkl', 'rb') as f:
         return pickle.load(f)
+    
+def pxTOcm (toConv, ratioIndex):
+    return (1/ratioIndex)*toConv
 
 pi = np.pi
 
@@ -30,10 +34,13 @@ dist = load_obj("dist")
 newcameramtx = load_obj("newcameramtx")
 roi = load_obj("roi")
 
+convIndex = load_obj("convIndex")
+
 print("Posiziona la base del robot sopra al puntino rosso")
 
 ## Ciclo per posizionare il robot sempre nella stessa posizione
 ## Sistemare la base del robot del punto dell'origine del robot
+
 while(1):
     _, frame = cap.read()
 
@@ -41,13 +48,15 @@ while(1):
     cv2.circle(frame,(int(w/2),int(h*5/6)),5,(0,0,255),-1)
     
     cv2.imshow('Posizionamento robot',frame)
-    cv2.waitKey(2)
-    
-    k = cv2.waitKey() & 0xFF
+        
+    k = cv2.waitKey(5) & 0xFF
     #If escape is pressed close all windows
     if k == 27:
+        cv2.destroyAllWindows()
         break
 
+origin= np.array([int(w/2),int(h*5/6)])
+#print(origin[0], origin[1])
 # VERDE [cartoncino]
 
 lower_green = np.array([30,128,0], dtype=np.uint8)
@@ -68,7 +77,7 @@ while(1):
     h,  w = frame.shape[:2]
     
     cv2.imshow('Pre-calib',frame)
-    cv2.waitKey(1)
+    #cv2.waitKey(1)
 
     ##### Method 2: Remapping
     # undistort
@@ -161,16 +170,35 @@ while(1):
         cv2.rectangle(frame, (x,y),(x+w,y+h), (0,100,255), 1)
         centerYellow = np.array([int(x+w/2),int(y+h/2)]);
         cv2.circle(frame,(int(centerYellow[0]),int(centerYellow[1])), 5, (255,0,0), -1)
-        print(centerYellow[:])
+        #print(centerYellow[:])
         if centerGreen[0] > 0 and centerYellow[1] > 0:
             cv2.line(frame,(centerGreen[0],centerGreen[1]),(centerYellow[0],centerYellow[1]),(255,0,0),2)
+    
+    # Posizione del gancio
+    g_x = (centerGreen[0] + centerYellow[0])/2
+    g_y = (centerGreen[1] + centerYellow[1])/2
+    goal = np.array([g_x, g_y])
 
-    #Segmento tra i 2 centri
-    angle = math.atan2(centerGreen[1]-centerYellow[1], centerGreen[0]-centerYellow[0])
+    #cv2.rectangle(frame, (int(origin[0]),int(origin[1])),(int(g_x), int(g_y)), (255,255,0), 1)
+
+    if centerGreen[0] > 0 and centerYellow[1] > 0:
+        cv2.arrowedLine(frame, (int(origin[0]),int(origin[1])),(int(g_x), int(g_y)), (0,0,127), 3, 4, 0, 0.1)
+    ### INVIARE COORDINATE:
+    ### X: g_x - origin[0]
+    ### Y: origin[1] - g_y
+    X = g_x - origin[0]
+    Y = origin[1] - g_y
+    X = pxTOcm(X, convIndex)
+    Y = pxTOcm(Y, convIndex)
+    
+    print(X, Y)
+    
+    #angle = math.atan2(centerGreen[1]-centerYellow[1], centerGreen[0]-centerYellow[0])
     #print(angle)
-    gradi = angle *180/pi
-    print(-gradi)
-
+    #gradi = angle *180/pi
+    #print(-gradi)
+    
+    cv2.circle(frame,(int(origin[0]),int(origin[1])),5,(0,0,0),-1)
     #Show the original camera feed with a bounding box overlayed 
     cv2.imshow('frame',frame)
 
