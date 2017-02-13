@@ -6,6 +6,10 @@ import numpy as np
 import pickle
 from time import sleep
 
+def save_obj (obj, name):
+    with open(name + '.pkl', 'wb') as f:
+        pickle.dump(obj, f, pickle.HIGHEST_PROTOCOL)
+
 def load_obj (name):
     with open(name + '.pkl', 'rb') as f:
         return pickle.load(f)
@@ -37,21 +41,22 @@ upper_yellow = np.array([30,255,255], dtype=np.uint8)
 myHeight = 9.7 #6.5
 myWidth = 9.9 #4.5
 
-for jjj in range(1,3):
+#for jjj in range(1,10):
+while(1):
     #centerGreen = np.array([-1,-1]);
     centerYellow = np.array([-1,-1]);
     # Take each frame
     _, frame = cap.read()
     
     ##### Calibrazione
-    h,  w = frame.shape[:2]
+    h0,  w0 = frame.shape[:2]
     
     #cv2.imshow('Pre-calib',frame)
     #cv2.waitKey(1)
 
     ##### Method 2: Remapping
     # undistort
-    mapx,mapy = cv2.initUndistortRectifyMap(mtx,dist,None,newcameramtx,(w,h),5)
+    mapx,mapy = cv2.initUndistortRectifyMap(mtx,dist,None,newcameramtx,(w0,h0),5)
     dst = cv2.remap(frame,mapx,mapy,cv2.INTER_LINEAR)
     
     # crop the image
@@ -113,16 +118,25 @@ for jjj in range(1,3):
     print("larghezza (INDICE): "+ str(convIndex1))
     print("Altezza (INDICE): "+ str(convIndex2))
 
+    cv2.rectangle(frame, (int(w0/2-20), int(h0/2-20)),(int(w0/2+20), int(h0/2+20)), (255,0,0), 1)
+
     #Show the original camera feed with a bounding box overlayed 
     cv2.imshow('frame',frame)
 
     #Use this command to prevent freezes in the feed
+
     k = cv2.waitKey(5) & 0xFF
+    '''
     #If escape is pressed close all windows
     if k == 27:
         break
-
-    #from time import sleep
-    #sleep(0.5) # Time in seconds
-
+    '''
+    from time import sleep
+    sleep(0.2) # Time in seconds
+    
+    if(abs(convIndex1 - convIndex2) < 0.2):
+        break
 cv2.destroyAllWindows()
+
+print("Indice di conversione:" + str(convIndex1))
+save_obj(convIndex1, "convIndex")
