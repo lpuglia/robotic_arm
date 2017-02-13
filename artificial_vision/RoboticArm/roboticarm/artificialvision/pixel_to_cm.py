@@ -1,38 +1,12 @@
-### DA INTEGRARE ###
-# Conversione da pixels in cm
-
 import cv2
 import numpy as np
-import pickle
-from time import sleep
+import support as s
 
-def save_obj (obj, name):
-    with open(name + '.pkl', 'wb') as f:
-        pickle.dump(obj, f, pickle.HIGHEST_PROTOCOL)
-
-def load_obj (name):
-    with open(name + '.pkl', 'rb') as f:
-        return pickle.load(f)
-
-
-def pxTOcm (toConv, ratioIndex):
-    return toConv/ratioIndex
-
-pi = np.pi
-
-# TEST COLORE - BGR -> HSV
 cap = cv2.VideoCapture(0)
-sleep(2)
-mtx = load_obj("mtx")
-dist = load_obj("dist")
-newcameramtx = load_obj("newcameramtx")
-roi = load_obj("roi")
+s.sleep(3)
 
-# VERDE [cartoncino]
+mtx, dist, newcameramtx, roi = s.calibParam()
 
-#lower_green = np.array([30,128,0], dtype=np.uint8)
-#upper_green = np.array([90,255,255], dtype=np.uint8)
-    
 # ARANCIONE [cartoncino]
     
 lower_yellow = np.array([5,192,0], dtype=np.uint8)
@@ -41,28 +15,20 @@ upper_yellow = np.array([30,255,255], dtype=np.uint8)
 myHeight = 9.7 #6.5
 myWidth = 9.9 #4.5
 
-#for jjj in range(1,10):
 while(1):
-    #centerGreen = np.array([-1,-1]);
     centerYellow = np.array([-1,-1]);
     # Take each frame
     _, frame = cap.read()
     
     ##### Calibrazione
     h0,  w0 = frame.shape[:2]
-    
-    #cv2.imshow('Pre-calib',frame)
-    #cv2.waitKey(1)
-
     ##### Method 2: Remapping
     # undistort
     mapx,mapy = cv2.initUndistortRectifyMap(mtx,dist,None,newcameramtx,(w0,h0),5)
     dst = cv2.remap(frame,mapx,mapy,cv2.INTER_LINEAR)
-    
     # crop the image
     x,y,w,h = roi
     dst = dst[y:y+h, x:x+w]
-
     frame = dst
     ##### FINE CALIBRAZIONE
     
@@ -124,18 +90,17 @@ while(1):
     cv2.imshow('frame',frame)
 
     #Use this command to prevent freezes in the feed
-
     k = cv2.waitKey(5) & 0xFF
     '''
     #If escape is pressed close all windows
     if k == 27:
         break
     '''
-    sleep(0.2) # Time in seconds
+    s.sleep(0.2) # Time in seconds
     
     if(abs(convIndex1 - convIndex2) < 0.2):
         break
 cv2.destroyAllWindows()
 
 print("Indice di conversione:" + str(convIndex1))
-save_obj(convIndex1, "convIndex")
+s.save_obj(convIndex1, "convIndex")

@@ -1,15 +1,8 @@
-##################################################################################
-##################################################################################
-##### E' necessario effettuare prima la calibrazione con lo script "colorDetection"
-##################################################################################
-##################################################################################
-
 import cv2
 import numpy as np
-import math
-import pickle
-from cv2 import waitKey
+import support as s
 
+'''
 def save_obj (obj, name):
     with open(name + '.pkl', 'wb') as f:
         pickle.dump(obj, f, pickle.HIGHEST_PROTOCOL)
@@ -20,21 +13,23 @@ def load_obj (name):
     
 def pxTOcm (toConv, ratioIndex):
     return (1/ratioIndex)*toConv
-
-pi = np.pi
+'''
 
 # TEST COLORE - BGR -> HSV
 cap = cv2.VideoCapture(0)
 
 
 
-
+'''
 mtx = load_obj("mtx")
 dist = load_obj("dist")
 newcameramtx = load_obj("newcameramtx")
 roi = load_obj("roi")
-
 convIndex = load_obj("convIndex")
+'''
+
+mtx, dist, newcameramtx, roi = s.calibParam()
+convIndex = s.getConvIndex()
 
 print("Posiziona la base del robot sopra al puntino rosso")
 
@@ -55,7 +50,6 @@ while(1):
     # crop the image
     x,y,w,h = roi
     dst = dst[y:y+h, x:x+w]
-
     frame = dst
     ##### FINE CALIBRAZIONE
     #h,w = frame.shape[:2]
@@ -78,30 +72,26 @@ upper_green = np.array([90,255,255], dtype=np.uint8)
     
 # ARANCIONE [cartoncino]
     
-lower_yellow = np.array([5,192,0], dtype=np.uint8)
-upper_yellow = np.array([30,255,255], dtype=np.uint8)
+lower_orange = np.array([5,192,0], dtype=np.uint8)
+upper_orange = np.array([30,255,255], dtype=np.uint8)
 
 while(1):
     centerGreen = np.array([-1,-1]);
-    centerYellow = np.array([-1,-1]);
+    centerOrange = np.array([-1,-1]);
     # Take each frame
     _, frame = cap.read()
     
     ##### Calibrazione
     h,  w = frame.shape[:2]
-    
     cv2.imshow('Pre-calib',frame)
     #cv2.waitKey(1)
-
     ##### Method 2: Remapping
     # undistort
     mapx,mapy = cv2.initUndistortRectifyMap(mtx,dist,None,newcameramtx,(w,h),5)
     dst = cv2.remap(frame,mapx,mapy,cv2.INTER_LINEAR)
-    
     # crop the image
     x,y,w,h = roi
     dst = dst[y:y+h, x:x+w]
-
     frame = dst
     ##### FINE CALIBRAZIONE
     
@@ -117,13 +107,13 @@ while(1):
         z = 255
     """
 
-    # Threshold the HSV image to get only green and yellow colors
+    # Threshold the HSV image to get only green and Orange colors
     greenMask = cv2.inRange(hsv, lower_green, upper_green)
-    yellowMask = cv2.inRange(hsv, lower_yellow, upper_yellow)
+    orangeMask = cv2.inRange(hsv, lower_orange, upper_orange)
     
     # Bitwise-AND mask and original image
     res = cv2.bitwise_and(frame,frame, mask= greenMask)
-    res2 = cv2.bitwise_and(frame,frame, mask= yellowMask)
+    res2 = cv2.bitwise_and(frame,frame, mask= orangeMask)
 
     #Get rid of background noise using erosion and fill in the holes using dilation and erode the final image on last time
     element = cv2.getStructuringElement(cv2.MORPH_RECT,(3,3)) # ex:(3,3)
@@ -132,20 +122,10 @@ while(1):
     greenMask = cv2.erode(greenMask,element)
     
     #idem per Arancione
-    yellowMask = cv2.erode(yellowMask,element, iterations=2) # ex:2
-    yellowMask = cv2.dilate(yellowMask,element,iterations=2) # ex:2
-    yellowMask = cv2.erode(yellowMask,element)
-    
-    ### Decommentare per visualizzare le maschere
-    
-    #cv2.imshow('frame',frame)
-    #cv2.imshow('erosion_Yellow',yellowMask)
-    #cv2.imshow('erosion_Green',greenMask)
-      
-    #cv2.imshow('res',res)
-    #cv2.imshow('res2',res2)
-    #cv2.imshow('res3',res+res2)  
-    
+    orangeMask = cv2.erode(orangeMask,element, iterations=2) # ex:2
+    orangeMask = cv2.dilate(orangeMask,element,iterations=2) # ex:2
+    orangeMask = cv2.erode(orangeMask,element)
+
     #Create Contours for all GREEN objects
     _, contours, hierarchy = cv2.findContours(greenMask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
     maximumArea = 0
@@ -166,11 +146,8 @@ while(1):
     #Show the contours in a seperate window
     #cv2.imshow('mask',greenMask)
     
-    ###########
-    ###########
-    
-    #Create Contours for all YELLOW objects
-    _, contours, hierarchy = cv2.findContours(yellowMask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+    #Create Contours for all orange objects
+    _, contours, hierarchy = cv2.findContours(orangeMask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
     maximumArea = 0
     bestContour = None
     for contour in contours:
@@ -178,38 +155,38 @@ while(1):
         if currentArea > maximumArea:
             bestContour = contour
             maximumArea = currentArea
-    #Create a bounding box around the biggest yellow object
+    #Create a bounding box around the biggest orange object
     if bestContour is not None:
         x,y,w,h = cv2.boundingRect(bestContour)
         cv2.rectangle(frame, (x,y),(x+w,y+h), (0,100,255), 1)
-        centerYellow = np.array([int(x+w/2),int(y+h/2)]);
-        cv2.circle(frame,(int(centerYellow[0]),int(centerYellow[1])), 5, (255,0,0), -1)
-        #print(centerYellow[:])
-        if centerGreen[0] > 0 and centerYellow[1] > 0:
-            cv2.line(frame,(centerGreen[0],centerGreen[1]),(centerYellow[0],centerYellow[1]),(255,0,0),2)
+        centerOrange = np.array([int(x+w/2),int(y+h/2)]);
+        cv2.circle(frame,(int(centerOrange[0]),int(centerOrange[1])), 5, (255,0,0), -1)
+        #print(centerOrange[:])
+        if centerGreen[0] > 0 and centerOrange[1] > 0:
+            cv2.line(frame,(centerGreen[0],centerGreen[1]),(centerOrange[0],centerOrange[1]),(255,0,0),2)
     
-    # Posizione del gancio
-    g_x = (centerGreen[0] + centerYellow[0])/2
-    g_y = (centerGreen[1] + centerYellow[1])/2
+    # Posizione del gancio del ragno
+    g_x = (centerGreen[0] + centerOrange[0])/2
+    g_y = (centerGreen[1] + centerOrange[1])/2
     goal = np.array([g_x, g_y])
 
     #cv2.rectangle(frame, (int(origin[0]),int(origin[1])),(int(g_x), int(g_y)), (255,255,0), 1)
 
-    if centerGreen[0] > 0 and centerYellow[1] > 0:
+    if centerGreen[0] > 0 and centerOrange[1] > 0:
         cv2.arrowedLine(frame, (int(origin[0]),int(origin[1])),(int(g_x), int(g_y)), (0,0,127), 3, 4, 0, 0.1)
     ### INVIARE COORDINATE:
     ### X: g_x - origin[0]
     ### Y: origin[1] - g_y
     X = g_x - origin[0]
     Y = origin[1] - g_y
-    X = pxTOcm(X, convIndex)
-    Y = pxTOcm(Y, convIndex)
+    X = s.pxTOcm(X, convIndex)
+    Y = s.pxTOcm(Y, convIndex)
     
     # coordinate su ascisse e ordinata rispetto al punto di origine del braccio robotico
     # from cm to mm
-    print(X*10, Y*10)
+    print("x = "+str(X*10)+"mm", "y = "+str(Y*10)+"mm")
 
-    #angle = math.atan2(centerGreen[1]-centerYellow[1], centerGreen[0]-centerYellow[0])
+    #angle = math.atan2(centerGreen[1]-centerOrange[1], centerGreen[0]-centerOrange[0])
     #print(angle)
     #gradi = angle *180/pi
     #print(-gradi)
@@ -218,17 +195,12 @@ while(1):
     #Show the original camera feed with a bounding box overlayed 
     cv2.imshow('frame',frame)
 
-    #Show the contours in a seperate window
-    #cv2.imshow('mask',greenMask)
-    #cv2.imshow('mask',yellowMask)
-    
     #Use this command to prevent freezes in the feed
     k = cv2.waitKey(5) & 0xFF
     #If escape is pressed close all windows
     if k == 27:
         break
-
-    from time import sleep
-    sleep(0.5) # Time in seconds
     
+    s.sleep(0.5)
+
 cv2.destroyAllWindows()
