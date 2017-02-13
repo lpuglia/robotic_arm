@@ -34,8 +34,8 @@ roi = load_obj("roi")
 lower_yellow = np.array([5,192,0], dtype=np.uint8)
 upper_yellow = np.array([30,255,255], dtype=np.uint8)
 
-myHeight = 6.5
-myWidth = 4.5
+myHeight = 9.7 #6.5
+myWidth = 9.9 #4.5
 
 for jjj in range(1,3):
     #centerGreen = np.array([-1,-1]);

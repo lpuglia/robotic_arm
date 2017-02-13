@@ -1,3 +1,6 @@
+
+### USELESS
+
 # import the necessary packages
 import numpy as np
 import cv2
@@ -14,9 +17,9 @@ def find_marker(image):
     hsv = cv2.GaussianBlur(hsv, (5, 5), 0)
 
     yellowMask = cv2.inRange(hsv, lower_yellow, upper_yellow)
-    
-    
+
     ###################################
+
     edged = cv2.Canny(yellowMask, 35, 125)
  
     # find the contours in the edged image and keep the largest one;
