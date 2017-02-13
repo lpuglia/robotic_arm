@@ -15,13 +15,13 @@ function [robDegrees, intDegrees, intErr] = moveRobotDH(degrees, port)
     lims = [0, 0, 0, 0, 0, 80;
             150, 150, 150, 140, 160, 130];
     % difference to 0 degrees
-    diff = [0, 0, 0, 70, 157, 0];
+    diff = [0, 0, 60, -7, 157, 0];
     % -1 inverts the rotation
-    invert = [1, 1, 1, -1, -1, 1];
+    invert = [1, 1, -1, -1, -1, 1];
     % servos move by different angles
     
     % this scaling fixes this
-    scaling = [1, 1, 1, 75/90, 1, 1];
+    scaling = [1, 78/90, 75/90, 75/90, 1, 1];
     
     %nans = isnan(degrees);
     degrees = diff + degrees .* scaling .* invert;
