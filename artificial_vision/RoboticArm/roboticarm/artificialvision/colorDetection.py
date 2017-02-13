@@ -43,8 +43,22 @@ print("Posiziona la base del robot sopra al puntino rosso")
 
 while(1):
     _, frame = cap.read()
+    
+    ##### Calibrazione
+    h,  w = frame.shape[:2]
+    #cv2.imshow('Pre-calib',frame)
+    #cv2.waitKey(1)
+    ##### Method 2: Remapping
+    # undistort
+    mapx,mapy = cv2.initUndistortRectifyMap(mtx,dist,None,newcameramtx,(w,h),5)
+    dst = cv2.remap(frame,mapx,mapy,cv2.INTER_LINEAR)
+    # crop the image
+    x,y,w,h = roi
+    dst = dst[y:y+h, x:x+w]
 
-    h,w = frame.shape[:2]
+    frame = dst
+    ##### FINE CALIBRAZIONE
+    #h,w = frame.shape[:2]
     cv2.circle(frame,(int(w/2),int(h*5/6)),5,(0,0,255),-1)
     
     cv2.imshow('Posizionamento robot',frame)
@@ -191,8 +205,10 @@ while(1):
     X = pxTOcm(X, convIndex)
     Y = pxTOcm(Y, convIndex)
     
-    print(X, Y)
-    
+    # coordinate su ascisse e ordinata rispetto al punto di origine del braccio robotico
+    # from cm to mm
+    print(X*10, Y*10)
+
     #angle = math.atan2(centerGreen[1]-centerYellow[1], centerGreen[0]-centerYellow[0])
     #print(angle)
     #gradi = angle *180/pi
