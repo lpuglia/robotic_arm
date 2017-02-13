@@ -6,9 +6,7 @@
 
 import cv2
 import numpy as np
-import math
 import pickle
-from cv2 import waitKey
 
 def save_obj (obj, name):
     with open(name + '.pkl', 'wb') as f:
