@@ -9,12 +9,16 @@ function [robDegrees, intDegrees, intErr] = moveRobotDH(degrees, port)
     %0 - 160 massimi gradi per rotazione pinza
     %80 aperto - 120
     
+    % rotation limits
     lims = [0, 0, 0, 0, 0, 80;
             150, 150, 150, 140, 160, 120];
+    % difference to 0 degrees
     diff = [0, 0, 0, 0, 157, 0];
+    % whether to invert the rotation
+    invert = [1, 1, 1, 1, -1, 1];
     
     minones = degrees == -1;
-    degrees = diff - degrees;
+    degrees = diff + degrees .* invert;
     
     % Fix degrees exceding limits
     wrongidx = degrees < lims(1,:) & ~minones;
