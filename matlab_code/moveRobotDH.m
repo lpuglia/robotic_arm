@@ -37,5 +37,5 @@ function [robDegrees, intDegrees, intErr] = moveRobotDH(degrees, port)
     degrees(isnan(degrees)) = -1;
     
     robDegrees = degrees;
-    %[intDegrees, intErr] = moveRobot(degrees, port);
+    [intDegrees, intErr] = moveRobot(degrees, port);
 end
