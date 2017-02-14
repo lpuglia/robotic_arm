@@ -1,1 +1,11 @@
 MODULES_MANAGER_V2
+calibrazione|/Users/luca/Desktop/robotica/robotic_arm/artificial_vision/RoboticArm/roboticarm/artificialvision/calibrazione.py
+cameraTest|/Users/luca/Desktop/robotica/robotic_arm/artificial_vision/RoboticArm/roboticarm/artificialvision/cameraTest.py
+colorDetection|/Users/luca/Desktop/robotica/robotic_arm/artificial_vision/RoboticArm/roboticarm/artificialvision/colorDetection.py
+distanceCalculation_USELESS|/Users/luca/Desktop/robotica/robotic_arm/artificial_vision/RoboticArm/roboticarm/artificialvision/distanceCalculation_USELESS.py
+getPhoto|/Users/luca/Desktop/robotica/robotic_arm/artificial_vision/RoboticArm/roboticarm/artificialvision/getPhoto.py
+main|/Users/luca/Desktop/robotica/robotic_arm/artificial_vision/RoboticArm/roboticarm/artificialvision/main.py
+pixel_to_cm|/Users/luca/Desktop/robotica/robotic_arm/artificial_vision/RoboticArm/roboticarm/artificialvision/pixel_to_cm.py
+support|/Users/luca/Desktop/robotica/robotic_arm/artificial_vision/RoboticArm/roboticarm/artificialvision/support.py
+temp|/Users/luca/Desktop/robotica/robotic_arm/artificial_vision/RoboticArm/roboticarm/artificialvision/temp.py
+utility|/Users/luca/Desktop/robotica/robotic_arm/artificial_vision/RoboticArm/roboticarm/artificialvision/utility.py
