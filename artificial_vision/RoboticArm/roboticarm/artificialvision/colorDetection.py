@@ -75,9 +75,15 @@ upper_green = np.array([90,255,255], dtype=np.uint8)
 lower_orange = np.array([5,192,0], dtype=np.uint8)
 upper_orange = np.array([30,255,255], dtype=np.uint8)
 
+# ROSSO [marker]
+    
+lower_red = np.array([105,128,63], dtype=np.uint8)
+upper_red = np.array([125,255,255], dtype=np.uint8)
+
 while(1):
     centerGreen = np.array([-1,-1]);
     centerOrange = np.array([-1,-1]);
+    centerRed = np.array([-1,-1]);
     # Take each frame
     _, frame = cap.read()
     
@@ -110,11 +116,11 @@ while(1):
     # Threshold the HSV image to get only green and Orange colors
     greenMask = cv2.inRange(hsv, lower_green, upper_green)
     orangeMask = cv2.inRange(hsv, lower_orange, upper_orange)
-    
+    redMask = cv2.inRange(hsv, lower_red, upper_red)
     # Bitwise-AND mask and original image
     res = cv2.bitwise_and(frame,frame, mask= greenMask)
     res2 = cv2.bitwise_and(frame,frame, mask= orangeMask)
-
+    res3 = cv2.bitwise_and(frame,frame, mask= redMask)
     #Get rid of background noise using erosion and fill in the holes using dilation and erode the final image on last time
     element = cv2.getStructuringElement(cv2.MORPH_RECT,(3,3)) # ex:(3,3)
     greenMask = cv2.erode(greenMask,element, iterations=2) # ex:2
@@ -125,6 +131,11 @@ while(1):
     orangeMask = cv2.erode(orangeMask,element, iterations=2) # ex:2
     orangeMask = cv2.dilate(orangeMask,element,iterations=2) # ex:2
     orangeMask = cv2.erode(orangeMask,element)
+    
+    #idem per Rosso
+    redMask = cv2.erode(redMask,element, iterations=2) # ex:2
+    redMask = cv2.dilate(redMask,element,iterations=2) # ex:2
+    redMask = cv2.erode(redMask,element)
 
     #Create Contours for all GREEN objects
     _, contours, hierarchy = cv2.findContours(greenMask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
@@ -165,6 +176,28 @@ while(1):
         if centerGreen[0] > 0 and centerOrange[1] > 0:
             cv2.line(frame,(centerGreen[0],centerGreen[1]),(centerOrange[0],centerOrange[1]),(255,0,0),2)
     
+    #Create Contours for all red objects
+    _, contours, hierarchy = cv2.findContours(redMask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+    maximumArea = 0
+    bestContour = None
+    for contour in contours:
+        currentArea = cv2.contourArea(contour)
+        if currentArea > maximumArea:
+            bestContour = contour
+            maximumArea = currentArea
+    #Create a bounding box around the biggest red object
+    if bestContour is not None:
+        x,y,w,h = cv2.boundingRect(bestContour)
+        #cv2.rectangle(frame, (x,y),(x+w,y+h), (0,100,255), 1)
+        centerRed = np.array([int(x+w/2),int(y+h/2)]);
+        #cv2.circle(frame,(int(centerRed[0]),int(centerRed[1])), 10, (255,255,255), -1)
+        #print(centerRed[:])
+        if centerRed[1] > 0:
+            cv2.circle(frame,(int(centerRed[0]),int(centerRed[1])), 15, (0,255,255), 3)
+            cv2.circle(frame,(int(centerRed[0]),int(centerRed[1])), 3, (255,255,255), -1)
+            
+
+
     # Posizione del gancio del ragno
     g_x = (centerGreen[0] + centerOrange[0])/2
     g_y = (centerGreen[1] + centerOrange[1])/2
