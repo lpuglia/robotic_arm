@@ -34,7 +34,7 @@ msg_t thReader(PCA9685 *arg) {
   while(true){
     while ((char)c !='&'){
         /* This will wait for a character to be received */
-        c = sdGet(&SD2);
+        c = sdGet(&SD1);
         //sdPut(&SD2,c);
         received[pos] = (char)c;
         pos++;
@@ -69,10 +69,16 @@ msg_t thReader(PCA9685 *arg) {
         d2<-2 || d2>160 ||
         d3<-2 || d3>160 ||
         d4<-2 || d4>160 ||
-        d5<-2 || d5>160)
-    chprintf((BaseSequentialStream *)&SD2,"%d,%d,%d,%d,%d,%d (WARNING: degrees out of bounds)\n",ch0,ch1,ch2,ch3,ch4,ch5);
-    else
-    chprintf((BaseSequentialStream *)&SD2,"%d,%d,%d,%d,%d,%d\n",ch0,ch1,ch2,ch3,ch4,ch5);
+        d5<-2 || d5>160){
+      chprintf((BaseSequentialStream *)&SD1,"%d,%d,%d,%d,%d,%d (WARNING: degrees out of bounds)\n",ch0,ch1,ch2,ch3,ch4,ch5);
+     // chThdSleepMilliseconds(100);
+     // chprintf((BaseSequentialStream *)&SD2,"%d,%d,%d,%d,%d,%d (WARNING: degrees out of bounds)\n",ch0,ch1,ch2,ch3,ch4,ch5);
+    }
+    else{
+      chprintf((BaseSequentialStream *)&SD1,"%d,%d,%d,%d,%d,%d\n",ch0,ch1,ch2,ch3,ch4,ch5);
+     // chThdSleepMilliseconds(100);
+     // chprintf((BaseSequentialStream *)&SD2,"%d,%d,%d,%d,%d,%d\n",ch0,ch1,ch2,ch3,ch4,ch5);
+    }
 
     if(ch0!=-1){
       setPWM(arg, 0, 0, ch0);
@@ -124,11 +130,14 @@ int main(void) {
   /*
    * Activates the serial driver 2 using the driver default configuration.
    */
-  sdStart(&SD2, &uartCfg);
+   sdStart(&SD2, &uartCfg);
 
    palSetPadMode(GPIOB, 8, PAL_MODE_ALTERNATE(4) | PAL_STM32_OTYPE_OPENDRAIN);
    palSetPadMode(GPIOB, 9, PAL_MODE_ALTERNATE(4) | PAL_STM32_OTYPE_OPENDRAIN);
+   palSetPadMode(GPIOA, 9, PAL_MODE_ALTERNATE(7)); // USART1 TX.
+   palSetPadMode(GPIOA, 10, PAL_MODE_ALTERNATE(7)); // USART1 RX.
 
+   sdStart(&SD1, &uartCfg);
    /**
       * Prepares the PCA9685
       */
