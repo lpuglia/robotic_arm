@@ -1,4 +1,4 @@
-%SerialLink.ikconnorot Numerical inverse kinematics with joint limits
+%SerialLink.ikconnorot Numerical inverse kinematics with joint limits yooo
 %
 % Q = R.ikconnorot(T) are the joint coordinates (1xN) corresponding to the robot 
 % end-effector pose T (4x4) which is a homogenenous transform.
