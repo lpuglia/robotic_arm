@@ -1,6 +1,7 @@
 import cv2
 import numpy as np
 import support as s
+import socket
 
 '''
 def save_obj (obj, name):
@@ -29,7 +30,9 @@ convIndex = load_obj("convIndex")
 '''
 
 mtx, dist, newcameramtx, roi = s.calibParam()
-convIndex = s.getConvIndex()
+#convIndex = s.getConvIndex()
+# TO Delete
+convIndex = 5.6
 
 print("Posiziona la base del robot sopra al puntino rosso")
 
@@ -79,6 +82,10 @@ upper_orange = np.array([30,255,255], dtype=np.uint8)
     
 lower_red = np.array([105,128,63], dtype=np.uint8)
 upper_red = np.array([125,255,255], dtype=np.uint8)
+
+
+coordinates = [0, 0, 0, 0, 0]
+index_coord = 0
 
 while(1):
     centerGreen = np.array([-1,-1]);
@@ -192,10 +199,11 @@ while(1):
         centerRed = np.array([int(x+w/2),int(y+h/2)]);
         #cv2.circle(frame,(int(centerRed[0]),int(centerRed[1])), 10, (255,255,255), -1)
         #print(centerRed[:])
+        '''
         if centerRed[1] > 0:
             cv2.circle(frame,(int(centerRed[0]),int(centerRed[1])), 15, (0,255,255), 3)
             cv2.circle(frame,(int(centerRed[0]),int(centerRed[1])), 3, (255,255,255), -1)
-            
+        '''   
 
 
     # Posizione del gancio del ragno
@@ -212,12 +220,20 @@ while(1):
     ### Y: origin[1] - g_y
     X = g_x - origin[0]
     Y = origin[1] - g_y
+
+    # OK
     X = s.pxTOcm(X, convIndex)
     Y = s.pxTOcm(Y, convIndex)
     
+    # Ultime 5 coordinate 
+    cc = [X*10, Y*10]
+    coordinates[index_coord % 5] = cc
+    index_coord+=1
+    #print(coordinates)
+    
     # coordinate su ascisse e ordinata rispetto al punto di origine del braccio robotico
     # from cm to mm
-    print("x = "+str(X*10)+"mm", "y = "+str(Y*10)+"mm")
+    print("x = "+str(X)+"mm", "y = "+str(Y)+"mm")
 
     #angle = math.atan2(centerGreen[1]-centerOrange[1], centerGreen[0]-centerOrange[0])
     #print(angle)
@@ -237,3 +253,30 @@ while(1):
     s.sleep(0.5)
 
 cv2.destroyAllWindows()
+
+print("Invio coordinate")
+#print(coordinates)
+toSend = np.median(coordinates, axis= 0)
+x = toSend[1]
+y = -toSend[0]
+print(np.median(coordinates, axis= 0))
+print(x, y)
+
+##### Send data with UDP
+
+#IP = "172.16.69.174"
+
+soc = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+
+print('flag2')
+soc.connect(("172.16.69.174", 8089))
+
+print('flag3')
+#clients_input = input("What you want to proceed my dear client?\n")
+clients_input = str(x) + "," + str(y) + "\n"
+nbyte = soc.send(clients_input.encode("utf8")) # we must encode the string to bytes
+
+print(nbyte)
+
+soc.shutdown(socket.SHUT_RDWR)
+soc.close()
