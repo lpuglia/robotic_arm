@@ -84,7 +84,8 @@ while(1):
     print("larghezza (INDICE): "+ str(convIndex1))
     print("Altezza (INDICE): "+ str(convIndex2))
 
-    cv2.rectangle(frame, (int(w0/2-20), int(h0/2-20)),(int(w0/2+20), int(h0/2+20)), (255,0,0), 1)
+    #cv2.rectangle(frame, (int(w0/2-20), int(h0/2-20)),(int(w0/2+20), int(h0/2+20)), (255,0,0), 1)
+    cv2.rectangle(frame, (int(w0/2-w/2), int(h0/2-h/2)),(int(w0/2+w/2), int(h0/2+h/2)), (255,0,0), 1)
 
     #Show the original camera feed with a bounding box overlayed 
     cv2.imshow('frame',frame)

@@ -10,7 +10,7 @@ def save_obj (obj, name):
         pickle.dump(obj, f, pickle.HIGHEST_PROTOCOL)
         
 def pxTOcm (toConv, ratioIndex):
-    return ratioIndex*toConv
+    return toConv/ratioIndex
 
 def calibParam ():
     mtx = load_obj("mtx")
