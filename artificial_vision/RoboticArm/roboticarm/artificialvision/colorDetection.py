@@ -30,9 +30,9 @@ convIndex = load_obj("convIndex")
 '''
 
 mtx, dist, newcameramtx, roi = s.calibParam()
-#convIndex = s.getConvIndex()
+convIndex = s.getConvIndex()
 # TO Delete
-convIndex = 5.6
+#convIndex = 5.6
 
 print("Posiziona la base del robot sopra al puntino rosso")
 
@@ -56,7 +56,7 @@ while(1):
     frame = dst
     ##### FINE CALIBRAZIONE
     #h,w = frame.shape[:2]
-    cv2.circle(frame,(int(w/2),int(h*5/6)),5,(0,0,255),-1)
+    cv2.circle(frame,(int(w/2),int(h*1/2)),5,(0,0,255),-1)
     
     cv2.imshow('Posizionamento robot',frame)
         
@@ -66,7 +66,7 @@ while(1):
         cv2.destroyAllWindows()
         break
 
-origin= np.array([int(w/2),int(h*5/6)])
+origin= np.array([int(w/2),int(h*1/2)])
 #print(origin[0], origin[1])
 # VERDE [cartoncino]
 
@@ -214,7 +214,7 @@ while(1):
     #cv2.rectangle(frame, (int(origin[0]),int(origin[1])),(int(g_x), int(g_y)), (255,255,0), 1)
 
     if centerGreen[0] > 0 and centerOrange[1] > 0:
-        cv2.arrowedLine(frame, (int(origin[0]),int(origin[1])),(int(g_x), int(g_y)), (0,0,127), 3, 4, 0, 0.1)
+        cv2.arrowedLine(frame, (int(origin[0]),int(origin[1])),(int(g_x), int(g_y)), (0,0,255), 3, 4, 0, 0.1)
     ### INVIARE COORDINATE:
     ### X: g_x - origin[0]
     ### Y: origin[1] - g_y
@@ -240,7 +240,7 @@ while(1):
     #gradi = angle *180/pi
     #print(-gradi)
     
-    cv2.circle(frame,(int(origin[0]),int(origin[1])),5,(0,0,0),-1)
+    cv2.circle(frame,(int(origin[0]),int(origin[1])),5,(255,255,255),-1)
     #Show the original camera feed with a bounding box overlayed 
     cv2.imshow('frame',frame)
 
@@ -268,15 +268,15 @@ print(x, y)
 
 soc = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 
-print('flag2')
+#print('flag2')
 soc.connect(("172.16.69.174", 8089))
 
-print('flag3')
+#print('flag3')
 #clients_input = input("What you want to proceed my dear client?\n")
 clients_input = str(x) + "," + str(y) + "\n"
 nbyte = soc.send(clients_input.encode("utf8")) # we must encode the string to bytes
 
-print(nbyte)
+#print(nbyte)
 
 soc.shutdown(socket.SHUT_RDWR)
 soc.close()
