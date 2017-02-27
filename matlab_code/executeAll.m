@@ -23,11 +23,11 @@ function [] = executeAll(port, waitBetweenMoves)
     
     [x, y] = getSpiderPosition('172.16.69.175', 8089, 60);
     
-    [res, err, flag, num_it, topass, robDegrees, intDegrees, intErr] = moveToPositionXY(x*0.8, y*0.8, port, 200, q0(1:5));
+    [res, err, flag, num_it, topass, robDegrees, intDegrees, intErr] = moveToPositionXY(x*0.8, y*0.8, -35*0.8, port, 200, q0(1:5));
     
     pause(waitBetweenMoves);
     
-    [res, err, flag, num_it, topass, robDegrees, intDegrees, intErr] = moveToPositionXY(x, y, port, 200, topass(1:5));
+    [res, err, flag, num_it, topass, robDegrees, intDegrees, intErr] = moveToPositionXY(x, y, -35, port, 200, topass(1:5));
     
     pause(waitBetweenMoves);
     
@@ -63,8 +63,8 @@ function [x, y] = getSpiderPosition(ip, port, timeout)
     fclose(t);
 end
 
-function [res, err, flag, num_it, topass, robDegrees, intDegrees, intErr] = moveToPositionXY(x, y, port, max_it, q0)
-    dest = [x, y, -35];
+function [res, err, flag, num_it, topass, robDegrees, intDegrees, intErr] = moveToPositionXY(x, y, z, port, max_it, q0)
+    dest = [x, y, z];
     
     it = 0;
     err = Inf;
